@@ -111,6 +111,7 @@ variable "master_node_settings" {
 variable "node_pools" {
   description = "Node pool definitions for the cluster."
   type        = list(object({
+    target_node = string,
 
     name   = string,
     size   = number,

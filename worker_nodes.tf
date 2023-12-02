@@ -21,6 +21,7 @@ locals {
         template       = coalesce(pool.template, var.node_template)
         network_bridge = pool.network_bridge
         network_tag    = pool.network_tag
+        target_node    = pool.target_node
         }, {
         i  = i
         ip = cidrhost(pool.subnet, i)
@@ -42,7 +43,7 @@ resource "proxmox_vm_qemu" "k3s-worker" {
 
   for_each = local.mapped_worker_nodes
 
-  target_node = var.proxmox_node
+  target_node = each.value.target_node
   name        = "${var.cluster_name}-${each.key}"
 
   clone = each.value.template

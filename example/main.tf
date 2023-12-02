@@ -26,8 +26,7 @@ provider proxmox {
 }
 
 module "k3s" {
-  source  = "fvumbaca/k3s/proxmox"
-  version = ">= 0.0.0, < 1" # Get latest 0.X release
+  source = "git::https://github.com/sipimokus/terraform-proxmox-k3s.git?ref=main"
 
   authorized_keys_file = "authorized_keys"
 
@@ -55,10 +54,18 @@ module "k3s" {
 
   node_pools = [
     {
-      name = "default"
+      name = "worker-dc01"
       size = 2
       # 192.168.0.208 -> 192.168.0.223 (14 available IPs for nodes)
       subnet = "192.168.0.208/28"
+      target_node = "my-proxmox-node"
+    },
+    {
+      name = "worker-dc02"
+      size = 2
+      # 192.168.0.208 -> 192.168.0.223 (14 available IPs for nodes)
+      subnet = "192.168.0.208/28"
+      target_node = "my-proxmox-node-02"
     }
   ]
 }
